@@ -10,12 +10,15 @@
         Title="TMLaunch" Height="700" Width="450">
     <Grid>
         <Rectangle x:Name="backgroundColor" Stroke="#FFF7B6B6" Fill="#FFF7B6B6"/>
-        <Button Content="Add" Margin="42,0,0,24" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="40"/>
+        <Button Content="Add" Click="AddApp" Margin="42,0,0,24" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="40"/>
+        <Button Content="Add" Click="EditApp" Margin="42,0,0,24" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="40"/>
         <Button Content="Edit" Margin="0,0,24,24" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="40"/>
 
         <ListView x:Name="listView" Margin="100">
+            <!--
             <ListViewItem Content="Added Items" HorizontalAlignment="Center"  ></ListViewItem>
             <ListViewItem IsSelected="True" MouseDoubleClick="RunApp">Default</ListViewItem>
+            -->
         </ListView>
         <TextBlock x:Name="console" HorizontalAlignment="Left" Margin="183,640,0,0" Text="TextBlock" TextWrapping="Wrap" VerticalAlignment="Top"/>
     </Grid>
