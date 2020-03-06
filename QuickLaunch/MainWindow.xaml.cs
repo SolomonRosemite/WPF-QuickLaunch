@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Newtonsoft.Json;
 using System.IO;
+using System.Diagnostics;
 
 namespace QuickLaunch
 {
@@ -23,7 +24,6 @@ namespace QuickLaunch
     /// </summary>
     public partial class MainWindow : Window
     {
-        // private string TMPath = GetDirectory() + @"\TMRosemite";
         private string QuickLaunchPath = GetDirectory() + @"\TMRosemite\QuickLaunch";
         public List<QuickApp> quickApps = new List<QuickApp>();
         List<ListViewItem> listViewItemsList = new List<ListViewItem>();
@@ -36,6 +36,7 @@ namespace QuickLaunch
 
         void loadApps()
         {
+            // Setting up Title
             ListViewItem title = new ListViewItem();
             title.Content = "Added Apps";
             title.HorizontalContentAlignment = HorizontalAlignment.Center;
@@ -43,6 +44,7 @@ namespace QuickLaunch
 
             SetDirectory();
 
+            // Read Json
             string jsonFromFile;
             using (var reader = new StreamReader(QuickLaunchPath + @"\SavedApps.json"))
             {
@@ -50,15 +52,6 @@ namespace QuickLaunch
             }
 
             quickApps = JsonConvert.DeserializeObject<List<QuickApp>>(jsonFromFile);
-            // foreach (QuickApp item in quickApps)
-            // {
-            //     Console.WriteLine(item.name);
-            //     foreach (var items in item.paths)
-            //     {
-            //         Console.WriteLine(items);
-            //     }
-            //     Console.WriteLine("--");
-            // }
 
             // Load Data to App
             for (int i = 0; i < quickApps.Count; i++)
@@ -72,6 +65,11 @@ namespace QuickLaunch
             }
 
             listView.ItemsSource = listViewItemsList;
+        }
+
+        void RunFile(string filePath)
+        {
+            Process.Start(filePath);
         }
 
         private void SetDirectory()
@@ -113,21 +111,23 @@ namespace QuickLaunch
         }
         private void AddApp(object sender, RoutedEventArgs e)
         {
-            // Json
+            string name = "Test";
+            // Add new App to Json
             List<string> paths = new List<string>() { "C/", "F/" };
-            QuickApp quick = new QuickApp() { name = "Test", paths = paths };
+            QuickApp quick = new QuickApp() { name = name, paths = paths };
 
             quickApps.Add(quick);
 
             string json = JsonConvert.SerializeObject(quickApps, Formatting.Indented);
             File.WriteAllText(QuickLaunchPath + @"\SavedApps.json", json);
 
-            // Update ListView
+            // Update ListView dosen't work yet
             ListViewItem listViewItems = new ListViewItem();
 
-            listViewItems.Content = "Test";
+            listViewItems.Content = name;
 
             listViewItems.MouseDoubleClick += RunApp;
+
             listViewItemsList.Add(listViewItems);
             listView.ItemsSource = listViewItemsList;
         }
