@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace QuickLaunch
 {
@@ -22,6 +23,8 @@ namespace QuickLaunch
     /// </summary>
     public partial class MainWindow : Window
     {
+        // private string TMPath = GetDirectory() + @"\TMRosemite";
+        private string QuickLaunchPath = GetDirectory() + @"\TMRosemite\QuickLaunch";
         public List<QuickApp> quickApps = new List<QuickApp>();
         List<ListViewItem> listViewItemsList = new List<ListViewItem>();
 
@@ -33,54 +36,103 @@ namespace QuickLaunch
 
         void loadApps()
         {
-            // Load Json data
-            // List<QuickApp> quickApps = new List<QuickApp>();
-            // quickApps = Loaded Json.
+            ListViewItem title = new ListViewItem();
+            title.Content = "Added Apps";
+            title.HorizontalContentAlignment = HorizontalAlignment.Center;
+            listViewItemsList.Add(title);
 
-            // Load Data to App
-            // for (int i = 0; i < quickApps.Count; i++)
+            SetDirectory();
+
+            string jsonFromFile;
+            using (var reader = new StreamReader(QuickLaunchPath + @"\SavedApps.json"))
+            {
+                jsonFromFile = reader.ReadToEnd();
+            }
+
+            quickApps = JsonConvert.DeserializeObject<List<QuickApp>>(jsonFromFile);
+            // foreach (QuickApp item in quickApps)
             // {
-            //     ListViewItem listViewItems = new ListViewItem();
-
-            //     listViewItems.MouseDoubleClick += RunApp;
-            //     listViewItemsList.Add(listViewItems);
+            //     Console.WriteLine(item.name);
+            //     foreach (var items in item.paths)
+            //     {
+            //         Console.WriteLine(items);
+            //     }
+            //     Console.WriteLine("--");
             // }
 
-            for (int i = 0; i < 2; i++)
+            // Load Data to App
+            for (int i = 0; i < quickApps.Count; i++)
             {
                 ListViewItem listViewItems = new ListViewItem();
-                switch (i)
-                {
-                    case 0:
-                        listViewItems.Content = "TMCode";
-                        break;
 
-                    case 1:
-                        listViewItems.Content = "Overwatch";
-                        break;
-                }
+                listViewItems.Content = quickApps[i].name;
+
                 listViewItems.MouseDoubleClick += RunApp;
                 listViewItemsList.Add(listViewItems);
             }
 
             listView.ItemsSource = listViewItemsList;
-            string json = JsonConvert.SerializeObject(quickApps);
         }
 
+        private void SetDirectory()
+        {
+            if (!Directory.Exists(QuickLaunchPath))
+            {
+                Console.WriteLine("Path is Set");
+                Directory.CreateDirectory(QuickLaunchPath);
+            }
+            else
+            {
+                Console.WriteLine("Path is okay");
+            }
+
+            if (!File.Exists(QuickLaunchPath + @"\SavedApps.json"))
+            {
+                File.Create(QuickLaunchPath + @"\SavedApps.json");
+            }
+        }
+
+        private static string GetDirectory()
+        {
+            string path = Directory.GetParent(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)).FullName;
+            if (Environment.OSVersion.Version.Major >= 6)
+            {
+                return path = Directory.GetParent(path).ToString();
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        // UI Functions
         private void RunApp(object sender, MouseButtonEventArgs e)
         {
             ListViewItem app = (ListViewItem)sender;
             Console.WriteLine("done");
-            console.Text = app.Content.ToString();
         }
         private void AddApp(object sender, RoutedEventArgs e)
         {
-            ListViewItem app = (ListViewItem)sender;
+            // Json
+            List<string> paths = new List<string>() { "C/", "F/" };
+            QuickApp quick = new QuickApp() { name = "Test", paths = paths };
 
+            quickApps.Add(quick);
+
+            string json = JsonConvert.SerializeObject(quickApps, Formatting.Indented);
+            File.WriteAllText(QuickLaunchPath + @"\SavedApps.json", json);
+
+            // Update ListView
+            ListViewItem listViewItems = new ListViewItem();
+
+            listViewItems.Content = "Test";
+
+            listViewItems.MouseDoubleClick += RunApp;
+            listViewItemsList.Add(listViewItems);
+            listView.ItemsSource = listViewItemsList;
         }
         private void EditApp(object sender, RoutedEventArgs e)
         {
-            ListViewItem app = (ListViewItem)sender;
 
         }
 
@@ -103,6 +155,6 @@ namespace QuickLaunch
     public class QuickApp
     {
         public string name { get; set; }
-        public string[] paths { get; set; }
+        public List<string> paths { get; set; }
     }
 }
