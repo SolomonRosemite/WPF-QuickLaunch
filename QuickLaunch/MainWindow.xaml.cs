@@ -70,8 +70,7 @@ namespace QuickLaunch
         private void RunApp(object sender, MouseButtonEventArgs e)
         {
             ListViewItem app = (ListViewItem)sender;
-            // Console.WriteLine("hiiii");
-            Console.Out.Write("done");
+            Console.WriteLine("done");
             console.Text = app.Content.ToString();
         }
         private void AddApp(object sender, RoutedEventArgs e)
