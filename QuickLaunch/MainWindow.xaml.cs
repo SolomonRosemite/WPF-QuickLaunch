@@ -159,7 +159,8 @@ namespace QuickLaunch
         }
         private void EditApp(object sender, RoutedEventArgs e)
         {
-
+            Popup popup = new Popup("Its all good");
+            popup.Show();
         }
 
         public static string getBetween(string strSource, string strStart, string strEnd)
