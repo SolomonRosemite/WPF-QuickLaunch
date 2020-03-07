@@ -24,8 +24,8 @@ namespace QuickLaunch
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string QuickLaunchPath = GetDirectory() + @"\TMRosemite\QuickLaunch";
-        public List<QuickApp> quickApps = new List<QuickApp>();
+        private static string QuickLaunchPath = GetDirectory() + @"\TMRosemite\QuickLaunch";
+        public static List<QuickApp> quickApps = new List<QuickApp>();
         List<ListViewItem> listViewItemsList = new List<ListViewItem>();
 
         public MainWindow()
@@ -67,6 +67,13 @@ namespace QuickLaunch
             listView.ItemsSource = listViewItemsList;
         }
 
+        public static void SaveJson(QuickApp quickApp)
+        {
+            quickApps.Add(quickApp);
+
+            string json = JsonConvert.SerializeObject(quickApps, Formatting.Indented);
+            File.WriteAllText(QuickLaunchPath + @"\SavedApps.json", json);
+        }
 
         private void SetDirectory()
         {

@@ -7,7 +7,7 @@
             Anführungszeichen )" TextWrapping="Wrap" VerticalAlignment="Top" Width="499" Height="200"/>
         <Button Name="Savebutton" Click="Save" Content="Save Unnamed" HorizontalAlignment="Left" Margin="50,0,0,20" Height="20" VerticalAlignment="Bottom"/>
         <Button Content="Cancel" Margin="0,0,50,20" HorizontalAlignment="Right" Width="39" Height="20" VerticalAlignment="Bottom" Click="Cancel"/>
-        <Label Content="How to Add" HorizontalAlignment="Right" Margin="50,40,90,0" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
-        <Label Content="note:\n rules ..." HorizontalAlignment="Right" Margin="0,85,80,0" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
+        <Label Content="How to Add" HorizontalAlignment="Right" Margin="0,40,103,0" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
+        <Label x:Name="description" Content="" Margin="0,85,50,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" HorizontalAlignment="Right" Width="180"/>
     </Grid>
 </Window>

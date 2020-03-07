@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Linq;
 
 namespace QuickLaunch
 {
@@ -20,17 +21,19 @@ namespace QuickLaunch
         bool firstLaunch = true;
         bool nameisEmpty = false;
         bool addedAppsisEmpty = false;
+        string paths;
+        string name = "Unnamed";
         public CreateApp()
         {
             InitializeComponent();
+            description.Content = "";
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string paths;
             try
             {
-                paths = MainWindow.getBetween(e.Source.ToString() + ":endofstring:", "TextBox:", ":endofstring:");
+                paths = MainWindow.getBetween(e.Source.ToString() + ":endofstring:", "TextBox: ", ":endofstring:");
                 addedAppsisEmpty = false;
             }
             catch
@@ -38,8 +41,6 @@ namespace QuickLaunch
                 addedAppsisEmpty = true;
                 return;
             }
-
-            Console.WriteLine(paths);
         }
 
         private void Save(object x, dynamic y)
@@ -50,6 +51,13 @@ namespace QuickLaunch
                 {
                     // Save App
                     Console.WriteLine("App Saved");
+
+                    List<string> pathsList = new List<string>();
+                    var array = (paths.Split(";"));
+                    pathsList = array.OfType<string>().ToList();
+
+                    QuickApp quickApp = new QuickApp() { name = name, paths = pathsList };
+                    MainWindow.SaveJson(quickApp);
                 }
                 else
                 {
@@ -60,8 +68,8 @@ namespace QuickLaunch
             else
             {
                 // name cant be empty
-                Console.WriteLine("name cant be empty");
                 // "Play sound"
+                Console.WriteLine("name cant be empty");
             }
         }
 
@@ -75,7 +83,8 @@ namespace QuickLaunch
             {
                 try
                 {
-                    Savebutton.Content = "Save " + MainWindow.getBetween(e.Source.ToString() + ":", "TextBox:", ":");
+                    name = MainWindow.getBetween(e.Source.ToString() + ":", "TextBox: ", ":");
+                    Savebutton.Content = "Save " + name;
                     nameisEmpty = false;
                 }
                 catch
