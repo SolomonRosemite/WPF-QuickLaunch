@@ -29,13 +29,16 @@ namespace QuickLaunch
         public CreateApp()
         {
             InitializeComponent();
+            Deletebutton.IsEnabled = false;
             description.Content = "";
         }
 
-        public CreateApp(QuickApp quickApp)
+        public CreateApp(QuickApp quickApp, byte index)
         {
             InitializeComponent();
+            Deletebutton.IsEnabled = true;
 
+            this.index = index;
             name = quickApp.name;
             Appname.Text = quickApp.name;
 
@@ -67,39 +70,76 @@ namespace QuickLaunch
 
         private void Save(object x, dynamic y)
         {
-            if (!nameisEmpty)
-            {
-                if (!addedAppsisEmpty)
-                {
-                    // Save App
-                    Console.WriteLine("App Saved");
-
-                    paths = paths.Replace(@"""", "");
-
-                    List<string> pathsList = new List<string>();
-                    var array = (paths.Split(";"));
-                    pathsList = array.OfType<string>().ToList();
-
-                    QuickApp quickApp = new QuickApp() { name = name, paths = pathsList };
-                    if (index != -1)
-                    {
-                        MainWindow.SaveJson(quickApp, index: index);
-                        return;
-                    }
-
-                    MainWindow.SaveJson(quickApp);
-                }
-                else
-                {
-                    Popup popup = new Popup("Path can't be Empty");
-                    popup.Show();
-                }
-            }
-            else
+            if (nameisEmpty)
             {
                 Popup popup = new Popup("Name can't be Empty");
                 popup.Show();
             }
+            else if (addedAppsisEmpty)
+            {
+                Popup popup = new Popup("Path can't be Empty");
+                popup.Show();
+            }
+            else if (CheckList(MainWindow.quickApps, name) && index == -1)
+            {
+                Popup popup = new Popup("Appname already exists");
+                popup.Show();
+            }
+            else
+            {
+                // Save App
+                Popup popup = new Popup("App Saved");
+                popup.Show();
+
+                paths = paths.Replace(@"""", "");
+
+                List<string> pathsList = new List<string>();
+
+                var array = (paths.Split(";"));
+                pathsList = array.OfType<string>().ToList();
+
+                QuickApp quickApp = new QuickApp() { name = name, paths = pathsList };
+
+                // Replace 
+                if (index != -1)
+                {
+                    MainWindow.SaveJson(quickApp, index: index);
+                }
+                else
+                {
+                    MainWindow.SaveJson(quickApp);
+                }
+                Close();
+                CloseMainWindowNow();
+                OpenMainWindowNow();
+            }
+        }
+
+        public void CloseMainWindowNow()
+        {
+            var mainWindow = (Application.Current.MainWindow as MainWindow);
+            if (mainWindow != null)
+            {
+                mainWindow.Close();
+            }
+        }
+
+        public void OpenMainWindowNow()
+        {
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+        }
+
+        private bool CheckList(List<QuickApp> quickApps, string name)
+        {
+            for (int i = 0; i < quickApps.Count; i++)
+            {
+                if (quickApps[i].name.ToLower() == name.ToLower())
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void Appname_TextChanged(object sender, TextChangedEventArgs e)
@@ -129,5 +169,12 @@ namespace QuickLaunch
             this.Close();
         }
 
+        private void Delete(object sender, RoutedEventArgs e)
+        {
+            MainWindow.DeleteJsonEntry((byte)index);
+            CloseMainWindowNow();
+            OpenMainWindowNow();
+            Close();
+        }
     }
 }

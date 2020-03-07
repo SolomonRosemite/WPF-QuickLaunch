@@ -3,9 +3,10 @@
         <Label Content="Name" HorizontalAlignment="Left" Margin="50,40,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="Appname" TextChanged="Appname_TextChanged" HorizontalAlignment="Left" Margin="50,70,0,0" Text="Unnamed" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="20"/>
         <Label Content="Path to Program" HorizontalAlignment="Left" Margin="50,110,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="pathTextbox" HorizontalAlignment="Left" TextChanged="TextBox_TextChanged" Margin="50,140,0,0" Text="Example: C:\Program Files (x86)\Google\Chrome\Application\chrome.exe; C:\Users\Jesse\AppData\Roaming\Spotify\spotify.exe del u know" TextWrapping="Wrap" VerticalAlignment="Top" Width="499" Height="200"/>
+        <TextBox x:Name="pathTextbox" HorizontalAlignment="Left" TextChanged="TextBox_TextChanged" Margin="50,140,0,0" Text="Example: C:\Program Files (x86)\Google\Chrome\Application\chrome.exe; C:\Users\Jesse\AppData\Roaming\Spotify\spotify.exe" TextWrapping="Wrap" VerticalAlignment="Top" Width="499" Height="200"/>
         <Button Name="Savebutton" Click="Save" Content="Save Unnamed" HorizontalAlignment="Left" Margin="50,0,0,20" Height="20" VerticalAlignment="Bottom"/>
-        <Button Content="Cancel" Margin="0,0,50,20" HorizontalAlignment="Right" Width="39" Height="20" VerticalAlignment="Bottom" Click="Cancel"/>
+        <Button Name="Deletebutton" Content="Delete" Click="Delete" Margin="0,0,100,20" HorizontalAlignment="Right" Width="39" Height="20" VerticalAlignment="Bottom" />
+        <Button Content="Cancel" Margin="0,0,50,20" HorizontalAlignment="Right" Width="39" Height="20" VerticalAlignment="Bottom" Click="Cancel" />
         <Label Content="How to Add" HorizontalAlignment="Right" Margin="0,40,103,0" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
         <Label x:Name="description" Content="" Margin="0,85,50,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" HorizontalAlignment="Right" Width="180"/>
     </Grid>

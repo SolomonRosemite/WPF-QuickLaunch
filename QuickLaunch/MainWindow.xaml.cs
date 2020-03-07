@@ -80,6 +80,14 @@ namespace QuickLaunch
             File.WriteAllText(QuickLaunchPath + @"\SavedApps.json", json);
         }
 
+        public static void DeleteJsonEntry(byte index)
+        {
+            quickApps.RemoveAt(index);
+
+            string json = JsonConvert.SerializeObject(quickApps, Formatting.Indented);
+            File.WriteAllText(QuickLaunchPath + @"\SavedApps.json", json);
+        }
+
         private void SetDirectory()
         {
             if (!Directory.Exists(QuickLaunchPath))
@@ -137,6 +145,7 @@ namespace QuickLaunch
                     Console.WriteLine("Item " + item + " not found.");
                 }
             }
+            System.Windows.Application.Current.Shutdown();
         }
         private void AddApp(object sender, RoutedEventArgs e)
         {
@@ -145,16 +154,23 @@ namespace QuickLaunch
         }
         private void EditApp(object sender, RoutedEventArgs e)
         {
-            string item = listView.SelectedItem.ToString();
-            item = getBetween(item + ":end:", "ListViewItem: ", ":end:");
-            for (int i = 0; i < quickApps.Count; i++)
+            try
             {
-                if (quickApps[i].name == item)
+                string item = listView.SelectedItem.ToString();
+                item = getBetween(item + ":end:", "ListViewItem: ", ":end:");
+                for (byte i = 0; i < quickApps.Count; i++)
                 {
-                    CreateApp createApp = new CreateApp(quickApps[i]);
-                    createApp.Show();
-                    break;
+                    if (quickApps[i].name == item)
+                    {
+                        CreateApp createApp = new CreateApp(quickApps[i], i);
+                        createApp.Show();
+                        break;
+                    }
                 }
+            }
+            catch
+            {
+
             }
         }
 
