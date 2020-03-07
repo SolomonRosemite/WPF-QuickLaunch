@@ -67,10 +67,6 @@ namespace QuickLaunch
             listView.ItemsSource = listViewItemsList;
         }
 
-        void RunFile(string filePath)
-        {
-            Process.Start(filePath);
-        }
 
         private void SetDirectory()
         {
@@ -103,33 +99,56 @@ namespace QuickLaunch
             }
         }
 
-        // UI Functions
         private void RunApp(object sender, MouseButtonEventArgs e)
         {
             ListViewItem app = (ListViewItem)sender;
-            Console.WriteLine("done");
+
+            for (int i = 0; i < quickApps.Count; i++)
+            {
+                if (quickApps[i].name == app.Content.ToString())
+                {
+                    RunFile(quickApps[i].paths);
+                    break;
+                }
+            }
+        }
+        void RunFile(List<string> filePath)
+        {
+            foreach (var item in filePath)
+            {
+                try
+                {
+                    Process.Start(item);
+                }
+                catch
+                {
+                    Console.WriteLine("Item " + item + " not found.");
+                }
+            }
         }
         private void AddApp(object sender, RoutedEventArgs e)
         {
-            string name = "Test";
-            // Add new App to Json
-            List<string> paths = new List<string>() { "C/", "F/" };
-            QuickApp quick = new QuickApp() { name = name, paths = paths };
+            CreateApp createApp = new CreateApp();
+            createApp.Show();
+            // string name = "Test";
+            // // Add new App to Json
+            // List<string> paths = new List<string>() { "C/", "F/" };
+            // QuickApp quick = new QuickApp() { name = name, paths = paths };
 
-            quickApps.Add(quick);
+            // quickApps.Add(quick);
 
-            string json = JsonConvert.SerializeObject(quickApps, Formatting.Indented);
-            File.WriteAllText(QuickLaunchPath + @"\SavedApps.json", json);
+            // string json = JsonConvert.SerializeObject(quickApps, Formatting.Indented);
+            // File.WriteAllText(QuickLaunchPath + @"\SavedApps.json", json);
 
-            // Update ListView dosen't work yet
-            ListViewItem listViewItems = new ListViewItem();
+            // // Update ListView dosen't work yet
+            // ListViewItem listViewItems = new ListViewItem();
 
-            listViewItems.Content = name;
+            // listViewItems.Content = name;
 
-            listViewItems.MouseDoubleClick += RunApp;
+            // listViewItems.MouseDoubleClick += RunApp;
 
-            listViewItemsList.Add(listViewItems);
-            listView.ItemsSource = listViewItemsList;
+            // listViewItemsList.Add(listViewItems);
+            // listView.ItemsSource = listViewItemsList;
         }
         private void EditApp(object sender, RoutedEventArgs e)
         {
