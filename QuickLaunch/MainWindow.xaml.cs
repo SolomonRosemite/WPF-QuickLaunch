@@ -67,8 +67,13 @@ namespace QuickLaunch
             listView.ItemsSource = listViewItemsList;
         }
 
-        public static void SaveJson(QuickApp quickApp)
+        public static void SaveJson(QuickApp quickApp, int index = -1)
         {
+            if (index != -1)
+            {
+                quickApps.RemoveAt(index);
+            }
+
             quickApps.Add(quickApp);
 
             string json = JsonConvert.SerializeObject(quickApps, Formatting.Indented);
@@ -137,30 +142,20 @@ namespace QuickLaunch
         {
             CreateApp createApp = new CreateApp();
             createApp.Show();
-            // string name = "Test";
-            // // Add new App to Json
-            // List<string> paths = new List<string>() { "C/", "F/" };
-            // QuickApp quick = new QuickApp() { name = name, paths = paths };
-
-            // quickApps.Add(quick);
-
-            // string json = JsonConvert.SerializeObject(quickApps, Formatting.Indented);
-            // File.WriteAllText(QuickLaunchPath + @"\SavedApps.json", json);
-
-            // // Update ListView dosen't work yet
-            // ListViewItem listViewItems = new ListViewItem();
-
-            // listViewItems.Content = name;
-
-            // listViewItems.MouseDoubleClick += RunApp;
-
-            // listViewItemsList.Add(listViewItems);
-            // listView.ItemsSource = listViewItemsList;
         }
         private void EditApp(object sender, RoutedEventArgs e)
         {
-            Popup popup = new Popup("Its all good");
-            popup.Show();
+            string item = listView.SelectedItem.ToString();
+            item = getBetween(item + ":end:", "ListViewItem: ", ":end:");
+            for (int i = 0; i < quickApps.Count; i++)
+            {
+                if (quickApps[i].name == item)
+                {
+                    CreateApp createApp = new CreateApp(quickApps[i]);
+                    createApp.Show();
+                    break;
+                }
+            }
         }
 
         public static string getBetween(string strSource, string strStart, string strEnd)

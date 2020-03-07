@@ -23,10 +23,32 @@ namespace QuickLaunch
         bool addedAppsisEmpty = false;
         string paths;
         string name = "Unnamed";
+
+        int index = -1;
+
         public CreateApp()
         {
             InitializeComponent();
             description.Content = "";
+        }
+
+        public CreateApp(QuickApp quickApp)
+        {
+            InitializeComponent();
+
+            name = quickApp.name;
+            Appname.Text = quickApp.name;
+
+            description.Content = "";
+
+            string paths = "";
+
+            for (int i = 0; i < quickApp.paths.Count - 1; i++)
+            {
+                paths += quickApp.paths[i] + ";\n";
+            }
+            paths += quickApp.paths[quickApp.paths.Count - 1];
+            pathTextbox.Text = paths;
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -52,24 +74,31 @@ namespace QuickLaunch
                     // Save App
                     Console.WriteLine("App Saved");
 
+                    paths = paths.Replace(@"""", "");
+
                     List<string> pathsList = new List<string>();
                     var array = (paths.Split(";"));
                     pathsList = array.OfType<string>().ToList();
 
                     QuickApp quickApp = new QuickApp() { name = name, paths = pathsList };
+                    if (index != -1)
+                    {
+                        MainWindow.SaveJson(quickApp, index: index);
+                        return;
+                    }
+
                     MainWindow.SaveJson(quickApp);
                 }
                 else
                 {
-                    // added Apps is Empty
-                    Console.WriteLine("Path Cant be Empty");
+                    Popup popup = new Popup("Path can't be Empty");
+                    popup.Show();
                 }
             }
             else
             {
-                // name cant be empty
-                // "Play sound"
-                Console.WriteLine("name cant be empty");
+                Popup popup = new Popup("Name can't be Empty");
+                popup.Show();
             }
         }
 
