@@ -26,7 +26,7 @@ namespace QuickLaunch
     {
         private static string QuickLaunchPath = GetDirectory() + @"\TMRosemite\QuickLaunch";
         public static List<QuickApp> quickApps = new List<QuickApp>();
-        List<ListViewItem> listViewItemsList = new List<ListViewItem>();
+        static List<ListViewItem> listViewItemsList = new List<ListViewItem>();
 
         public MainWindow()
         {
@@ -52,6 +52,9 @@ namespace QuickLaunch
             }
 
             quickApps = JsonConvert.DeserializeObject<List<QuickApp>>(jsonFromFile);
+
+            // Sort List
+            quickApps = quickApps.OrderBy(o => o.name).ToList();
 
             // Load Data to App
             for (int i = 0; i < quickApps.Count; i++)
@@ -170,7 +173,8 @@ namespace QuickLaunch
             }
             catch
             {
-
+                Popup popup = new Popup("Select the App you want to edit.");
+                popup.Show();
             }
         }
 

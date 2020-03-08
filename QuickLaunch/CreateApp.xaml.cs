@@ -30,7 +30,7 @@ namespace QuickLaunch
         {
             InitializeComponent();
             Deletebutton.IsEnabled = false;
-            description.Content = "";
+            description.Content = "- Write or Copy paste the path \n  of the file.\n- Split each path with a \";\".\n- Check out the shown example\n  and delete the example\n  befor adding.";
         }
 
         public CreateApp(QuickApp quickApp, byte index)
@@ -88,8 +88,7 @@ namespace QuickLaunch
             else
             {
                 // Save App
-                Popup popup = new Popup("App Saved");
-                popup.Show();
+                string Context;
 
                 paths = paths.Replace(@"""", "");
 
@@ -104,14 +103,18 @@ namespace QuickLaunch
                 if (index != -1)
                 {
                     MainWindow.SaveJson(quickApp, index: index);
+                    Context = "App Edited";
                 }
                 else
                 {
                     MainWindow.SaveJson(quickApp);
+                    Context = "App Saved";
                 }
+                Popup popup = new Popup(Context);
                 Close();
                 CloseMainWindowNow();
                 OpenMainWindowNow();
+                popup.Show();
             }
         }
 

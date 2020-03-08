@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         MinHeight="200"
         MinWidth="200"
+        Icon="icon.png"
         Title="TMLaunch" Height="700" Width="450">
     <Grid>
         <Rectangle x:Name="backgroundColor" Stroke="#FFF7B6B6" Fill="#FFF7B6B6"/>
