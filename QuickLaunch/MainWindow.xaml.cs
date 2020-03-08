@@ -36,6 +36,10 @@ namespace QuickLaunch
 
         void loadApps()
         {
+            // Clear
+            listViewItemsList.Clear();
+            quickApps.Clear();
+
             // Setting up Title
             ListViewItem title = new ListViewItem();
             title.Content = "Added Apps";
