@@ -21,7 +21,6 @@ namespace QuickLaunch
         {
             InitializeComponent();
             MessageLabel.Content = message;
-            Console.WriteLine("Play sound here");
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
