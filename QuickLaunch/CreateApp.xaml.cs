@@ -53,23 +53,10 @@ namespace QuickLaunch
 
             for (int i = 0; i < quickApp.paths.Count - 1; i++)
             {
-                if (quickApp.paths[i][0] == ' ')
-                {
-                    quickApp.paths[i] = quickApp.paths[i].Substring(1);
-                }
                 paths += quickApp.paths[i] + ";\n";
             }
 
             byte lastIndexpath = Convert.ToByte(quickApp.paths.Count - 1);
-            if (quickApp.paths[lastIndexpath][0] == ' ')
-            {
-                quickApp.paths[lastIndexpath] = quickApp.paths[lastIndexpath].Substring(1);
-            }
-
-            if (quickApp.paths[lastIndexpath][0] == ' ')
-            {
-                quickApp.paths[lastIndexpath] = quickApp.paths[lastIndexpath].Substring(1);
-            }
 
             paths += quickApp.paths[lastIndexpath];
             pathTextbox.Text = paths;
@@ -81,18 +68,10 @@ namespace QuickLaunch
 
             for (int i = 0; i < quickApp.tasks.Count - 1; i++)
             {
-                if (quickApp.tasks[i][0] == ' ')
-                {
-                    quickApp.tasks[i] = quickApp.tasks[i].Substring(1);
-                }
                 tasks += quickApp.tasks[i] + ";\n";
             }
 
             byte lastIndex = Convert.ToByte(quickApp.tasks.Count - 1);
-            if (quickApp.tasks[lastIndex][0] == ' ')
-            {
-                quickApp.tasks[lastIndex] = quickApp.tasks[lastIndex].Substring(1);
-            }
 
             tasks += quickApp.tasks[lastIndex];
             tasksTextbox.Text = tasks;
@@ -151,6 +130,11 @@ namespace QuickLaunch
 
                 var arraytask = tasks.Split(";");
                 tasksList = arraytask.OfType<string>().ToList();
+
+                if (tasksList[0].Contains("Example: "))
+                {
+                    tasksList = null;
+                }
 
                 QuickApp quickApp = new QuickApp() { name = name, paths = pathsList, tasks = tasksList };
 

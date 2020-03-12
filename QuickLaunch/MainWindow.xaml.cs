@@ -87,8 +87,6 @@ namespace QuickLaunch
             File.WriteAllText(QuickLaunchPath + @"\SavedApps.json", json);
         }
 
-
-
         private void RunApp(object sender, MouseButtonEventArgs e)
         {
             ListViewItem app = (ListViewItem)sender;
@@ -102,6 +100,7 @@ namespace QuickLaunch
                 }
             }
         }
+
         void RunFile(List<string> filePath, List<string> taskkill)
         {
             bool error = false;
