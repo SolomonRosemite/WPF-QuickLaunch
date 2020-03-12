@@ -87,44 +87,7 @@ namespace QuickLaunch
             File.WriteAllText(QuickLaunchPath + @"\SavedApps.json", json);
         }
 
-        public static void DeleteJsonEntry(byte index)
-        {
-            quickApps.RemoveAt(index);
 
-            string json = JsonConvert.SerializeObject(quickApps, Formatting.Indented);
-            File.WriteAllText(QuickLaunchPath + @"\SavedApps.json", json);
-        }
-
-        private void SetDirectory()
-        {
-            if (!Directory.Exists(QuickLaunchPath))
-            {
-                Console.WriteLine("Path is Set");
-                Directory.CreateDirectory(QuickLaunchPath);
-            }
-            else
-            {
-                Console.WriteLine("Path is okay");
-            }
-
-            if (!File.Exists(QuickLaunchPath + @"\SavedApps.json"))
-            {
-                File.Create(QuickLaunchPath + @"\SavedApps.json");
-            }
-        }
-
-        private static string GetDirectory()
-        {
-            string path = Directory.GetParent(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)).FullName;
-            if (Environment.OSVersion.Version.Major >= 6)
-            {
-                return path = Directory.GetParent(path).ToString();
-            }
-            else
-            {
-                return "";
-            }
-        }
 
         private void RunApp(object sender, MouseButtonEventArgs e)
         {
@@ -134,14 +97,15 @@ namespace QuickLaunch
             {
                 if (quickApps[i].name == app.Content.ToString())
                 {
-                    RunFile(quickApps[i].paths);
+                    RunFile(quickApps[i].paths, quickApps[i].tasks);
                     break;
                 }
             }
         }
-        void RunFile(List<string> filePath)
+        void RunFile(List<string> filePath, List<string> taskkill)
         {
-            foreach (var item in filePath)
+            bool error = false;
+            foreach (string item in filePath)
             {
                 try
                 {
@@ -149,10 +113,30 @@ namespace QuickLaunch
                 }
                 catch
                 {
-                    Console.WriteLine("Item " + item + " not found.");
+                    Popup popup = new Popup("Item: " + item + " not found.");
+                    popup.Show();
+
+                    error = true;
                 }
             }
-            System.Windows.Application.Current.Shutdown();
+
+            // Task kill
+            EndTask(taskkill);
+
+            if (!error)
+            {
+                Application.Current.Shutdown();
+            }
+        }
+
+        void EndTask(List<string> tasks)
+        {
+            foreach (string item in tasks)
+            {
+                Process[] procs = Process.GetProcessesByName(item);
+                foreach (Process p in procs) {
+                    p.Kill(); }
+            }
         }
         private void AddApp(object sender, RoutedEventArgs e)
         {
@@ -181,6 +165,13 @@ namespace QuickLaunch
                 popup.Show();
             }
         }
+        public static void DeleteJsonEntry(byte index)
+        {
+            quickApps.RemoveAt(index);
+
+            string json = JsonConvert.SerializeObject(quickApps, Formatting.Indented);
+            File.WriteAllText(QuickLaunchPath + @"\SavedApps.json", json);
+        }
 
         public static string getBetween(string strSource, string strStart, string strEnd)
         {
@@ -196,11 +187,37 @@ namespace QuickLaunch
                 return "";
             }
         }
+        private static void SetDirectory()
+        {
+            if (!Directory.Exists(QuickLaunchPath))
+            {
+                Directory.CreateDirectory(QuickLaunchPath);
+            }
+
+            if (!File.Exists(QuickLaunchPath + @"\SavedApps.json"))
+            {
+                File.Create(QuickLaunchPath + @"\SavedApps.json");
+            }
+        }
+
+        private static string GetDirectory()
+        {
+            string path = Directory.GetParent(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)).FullName;
+            if (Environment.OSVersion.Version.Major >= 6)
+            {
+                return path = Directory.GetParent(path).ToString();
+            }
+            else
+            {
+                return "";
+            }
+        }
     }
 
     public class QuickApp
     {
         public string name { get; set; }
         public List<string> paths { get; set; }
+        public List<string> tasks { get; set; }
     }
 }

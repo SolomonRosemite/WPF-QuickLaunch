@@ -22,6 +22,7 @@ namespace QuickLaunch
         bool nameisEmpty = false;
         bool addedAppsisEmpty = false;
         string paths;
+        string tasks = "";
         string name = "Unnamed";
 
         int index = -1;
@@ -30,7 +31,8 @@ namespace QuickLaunch
         {
             InitializeComponent();
             Deletebutton.IsEnabled = false;
-            description.Content = "- Write or Copy paste the path \n  of the file.\n- Split each path with a \";\".\n- Check out the shown example\n  and delete the example\n  befor adding.";
+
+            load();
         }
 
         public CreateApp(QuickApp quickApp, byte index)
@@ -38,20 +40,68 @@ namespace QuickLaunch
             InitializeComponent();
             Deletebutton.IsEnabled = true;
 
+            load();
+
+            if (quickApp.paths.Count == 0) { return; }
+
             this.index = index;
             name = quickApp.name;
             Appname.Text = quickApp.name;
 
-            description.Content = "";
-
+            // paths
             string paths = "";
 
             for (int i = 0; i < quickApp.paths.Count - 1; i++)
             {
+                if (quickApp.paths[i][0] == ' ')
+                {
+                    quickApp.paths[i] = quickApp.paths[i].Substring(1);
+                }
                 paths += quickApp.paths[i] + ";\n";
             }
-            paths += quickApp.paths[quickApp.paths.Count - 1];
+
+            byte lastIndexpath = Convert.ToByte(quickApp.paths.Count - 1);
+            if (quickApp.paths[lastIndexpath][0] == ' ')
+            {
+                quickApp.paths[lastIndexpath] = quickApp.paths[lastIndexpath].Substring(1);
+            }
+
+            if (quickApp.paths[lastIndexpath][0] == ' ')
+            {
+                quickApp.paths[lastIndexpath] = quickApp.paths[lastIndexpath].Substring(1);
+            }
+
+            paths += quickApp.paths[lastIndexpath];
             pathTextbox.Text = paths;
+
+            try { if (quickApp.tasks.Count == 0) { return; } } catch { return; }
+
+            // tasks
+            string tasks = "";
+
+            for (int i = 0; i < quickApp.tasks.Count - 1; i++)
+            {
+                if (quickApp.tasks[i][0] == ' ')
+                {
+                    quickApp.tasks[i] = quickApp.tasks[i].Substring(1);
+                }
+                tasks += quickApp.tasks[i] + ";\n";
+            }
+
+            byte lastIndex = Convert.ToByte(quickApp.tasks.Count - 1);
+            if (quickApp.tasks[lastIndex][0] == ' ')
+            {
+                quickApp.tasks[lastIndex] = quickApp.tasks[lastIndex].Substring(1);
+            }
+
+            tasks += quickApp.tasks[lastIndex];
+            tasksTextbox.Text = tasks;
+        }
+
+        void load()
+        {
+            descriptionTaskKill.Content = "- Write the Process without .exe \n- Add a task by Writing the\n ( Process ) not the Program.\n- Split each path with a \";\".\n- Example: WhatsApp; Discord\n  Don't do WhatsApp.exe.";
+            description.Content = "- Write or Copy paste the path \n  of the file.\n- Split each path with a \";\".\n- Check out the shown example\n  and delete the example\n  befor adding.";
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -94,10 +144,15 @@ namespace QuickLaunch
 
                 List<string> pathsList = new List<string>();
 
-                var array = (paths.Split(";"));
-                pathsList = array.OfType<string>().ToList();
+                var arraypath = paths.Split(";");
+                pathsList = arraypath.OfType<string>().ToList();
 
-                QuickApp quickApp = new QuickApp() { name = name, paths = pathsList };
+                List<string> tasksList = new List<string>();
+
+                var arraytask = tasks.Split(";");
+                tasksList = arraytask.OfType<string>().ToList();
+
+                QuickApp quickApp = new QuickApp() { name = name, paths = pathsList, tasks = tasksList };
 
                 // Replace 
                 if (index != -1)
@@ -178,6 +233,19 @@ namespace QuickLaunch
             CloseMainWindowNow();
             OpenMainWindowNow();
             Close();
+        }
+
+        private void tasksTextbox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                tasks = MainWindow.getBetween(e.Source.ToString() + ":endofstring:", "TextBox: ", ":endofstring:");
+            }
+            catch
+            {
+                tasks = "";
+                return;
+            }
         }
     }
 }
