@@ -132,9 +132,21 @@ namespace QuickLaunch
         {
             foreach (string item in tasks)
             {
-                Process[] procs = Process.GetProcessesByName(item);
-                foreach (Process p in procs) {
-                    p.Kill(); }
+                if (item.Length == 0)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    Process[] procs = Process.GetProcessesByName(item);
+                    foreach (Process p in procs) { p.Kill(); }
+                }
+                catch
+                {
+                    Popup popup = new Popup("Item: " + item + " not found.");
+                    popup.Show();
+                }
             }
         }
         private void AddApp(object sender, RoutedEventArgs e)

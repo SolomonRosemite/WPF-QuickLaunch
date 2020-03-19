@@ -10,10 +10,14 @@
         Icon="icon.png"
         Title="TMLaunch" Height="700" Width="450">
     <Grid>
-        <Rectangle x:Name="backgroundColor" Stroke="#FFF7B6B6" Fill="#FFF7B6B6"/>
-        <Button Content="Add" Click="AddApp" Margin="42,0,0,24" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="40"/>
-        <Button Content="Edit" Click="EditApp" Margin="0,0,24,24" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="40"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="163*"/>
+            <RowDefinition Height="8*"/>
+        </Grid.RowDefinitions>
+        <Rectangle x:Name="backgroundColor" Stroke="#FFF7B6B6" Fill="#FFF7B6B6" Grid.RowSpan="2"/>
+        <Button Content="Add" Click="AddApp" Margin="42,0,0,24" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="40" Grid.RowSpan="2"/>
+        <Button Content="Edit" Click="EditApp" Margin="0,0,42,24" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="40" Grid.RowSpan="2"/>
 
-        <ListView x:Name="listView" Margin="100"/>
+        <ListView x:Name="listView" Margin="100,100,100,68"/>
     </Grid>
 </Window>
