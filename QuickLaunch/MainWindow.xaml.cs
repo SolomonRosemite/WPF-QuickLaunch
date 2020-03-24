@@ -130,6 +130,11 @@ namespace QuickLaunch
 
         void EndTask(List<string> tasks)
         {
+            if (tasks == null)
+            {
+                return;
+            }
+
             foreach (string item in tasks)
             {
                 if (item.Length == 0)
