@@ -221,7 +221,7 @@ namespace QuickLaunch
             string path = Directory.GetParent(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)).FullName;
             if (Environment.OSVersion.Version.Major >= 6)
             {
-                return path = Directory.GetParent(path).ToString();
+                return Directory.GetParent(path).ToString();
             }
             else
             {
