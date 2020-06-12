@@ -68,6 +68,7 @@ namespace QuickLaunch
                 listViewItems.Content = quickApps[i].name;
 
                 listViewItems.MouseDoubleClick += RunApp;
+                listViewItems.PreviewKeyDown += RunApp;
                 listViewItemsList.Add(listViewItems);
             }
 
@@ -87,8 +88,11 @@ namespace QuickLaunch
             File.WriteAllText(QuickLaunchPath + @"\SavedApps.json", json);
         }
 
-        private void RunApp(object sender, MouseButtonEventArgs e)
+        private void RunApp(object sender, object e)
         {
+            if (e is KeyEventArgs && ((KeyEventArgs)e).Key != Key.Enter)
+                return;
+
             ListViewItem app = (ListViewItem)sender;
 
             for (int i = 0; i < quickApps.Count; i++)
