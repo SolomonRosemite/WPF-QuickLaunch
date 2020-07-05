@@ -3,6 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        FocusManager.FocusedElement="{Binding ElementName=listView}"
+        Loaded="OnLoaded"
         xmlns:local="clr-namespace:QuickLaunch"
         mc:Ignorable="d"
         MinHeight="200"
@@ -18,6 +20,6 @@
         <Button Content="Add" Click="AddApp" Margin="42,0,0,24" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="40" Grid.RowSpan="2"/>
         <Button Content="Edit" Click="EditApp" Margin="0,0,42,24" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="40" Grid.RowSpan="2"/>
 
-        <ListView x:Name="listView" Margin="100,100,100,68"/>
+        <ListView x:Name="listView" Margin="100,100,100,68" IsTextSearchEnabled="True" TextSearch.Text="CustomObject.StringProperty"  SelectionChanged="listView_SelectionChanged" />
     </Grid>
 </Window>

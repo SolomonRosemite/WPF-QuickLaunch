@@ -35,7 +35,7 @@ namespace QuickLaunch
             load();
         }
 
-        public CreateApp(QuickApp quickApp, byte index)
+        public CreateApp(QuickApp quickApp, int index)
         {
             InitializeComponent();
             Deletebutton.IsEnabled = true;

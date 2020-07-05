@@ -26,7 +26,8 @@ namespace QuickLaunch
     {
         private static string QuickLaunchPath = GetDirectory() + @"\TMRosemite\QuickLaunch";
         public static List<QuickApp> quickApps = new List<QuickApp>();
-        static List<ListViewItem> listViewItemsList = new List<ListViewItem>();
+        private static List<ListViewItem> listViewItemsList = new List<ListViewItem>();
+        private ListViewItem title = new ListViewItem();
 
         public MainWindow()
         {
@@ -41,9 +42,9 @@ namespace QuickLaunch
             quickApps.Clear();
 
             // Setting up Title
-            ListViewItem title = new ListViewItem();
             title.Content = "Added Apps";
             title.HorizontalContentAlignment = HorizontalAlignment.Center;
+            title.IsSelected = true;
             listViewItemsList.Add(title);
 
             SetDirectory();
@@ -51,9 +52,7 @@ namespace QuickLaunch
             // Read Json
             string jsonFromFile;
             using (var reader = new StreamReader(QuickLaunchPath + @"\SavedApps.json"))
-            {
                 jsonFromFile = reader.ReadToEnd();
-            }
 
             quickApps = JsonConvert.DeserializeObject<List<QuickApp>>(jsonFromFile);
 
@@ -231,6 +230,16 @@ namespace QuickLaunch
             {
                 return "";
             }
+        }
+
+        private void OnLoaded(object sender, EventArgs e)
+        {
+            this.listView.Focus();
+        }
+
+        private void listView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            title.IsSelected = false;
         }
     }
 
