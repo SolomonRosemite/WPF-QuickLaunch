@@ -18,7 +18,7 @@
 
 # Features 📖
 - Create a config to start multiple apps at once.
-- Stop multiple apps at once.
+- Stop multiple apps at once (to stop you from getting distracted)
 
 # Built with⛏️
 
