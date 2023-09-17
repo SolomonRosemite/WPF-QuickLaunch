@@ -10,7 +10,7 @@
   </p>
 
 <p align="center"><h3 align="center">Desktop preview</h3></p>
-<p align="center">Click on the image if the preview is to small</p>
+<p align="center">Click on the image if the preview is too small</p>
 <p align="center"> 
   <img src="https://github.com/SolomonRosemite/WPF-QuickLaunch/assets/60587271/0390934b-2e35-484c-83c7-f0d2c91068b5" />
 </p>
