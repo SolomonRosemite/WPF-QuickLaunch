@@ -215,7 +215,7 @@ namespace QuickLaunch
 
             if (!File.Exists(QuickLaunchPath + @"\SavedApps.json"))
             {
-                File.Create(QuickLaunchPath + @"\SavedApps.json");
+                File.WriteAllText(QuickLaunchPath + @"\SavedApps.json", "[]");
             }
         }
 
